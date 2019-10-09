@@ -1,13 +1,20 @@
 
 // KontrolorBudzeta
 var KontrolorBudzeta =(function(){
-    var Expense = function(id,description,value){
-      this.id= id; this.description= description; this.value= value;  
-        this.percentage = -1;
+
+    var Expense = function(id, description, value){
+
+      this.id= id; 
+      this.description= description;
+      this.value= value;  
+      this.percentage = -1;
     };
     
     Expense.prototype.calcPercentage = function(totalIncome){
-        if(totalIncome>0){this.percentage = Math.round((this.value / totalIncome) *100);}
+
+        if(totalIncome>0)
+        {this.percentage = Math.round((this.value / totalIncome) *100);}
+
         else {this.percentage = -1;}
         
     };
@@ -18,7 +25,11 @@ var KontrolorBudzeta =(function(){
     
     
     var Income = function(id,description,value){
-      this.id= id; this.description= description; this.value= value;  
+
+      this.id= id;
+      this.description= description;
+      this.value= value;  
+
     };
     
     var allExpenses =[];
@@ -26,14 +37,17 @@ var KontrolorBudzeta =(function(){
     var totalExpenses = 0;
     
     var calculateTotal = function(type){
-        var sum=0;   data.allItems[type].forEach(function(cur){
+        var sum=0;  
+        
+        data.allItems[type].forEach(function(cur){
             sum=sum+cur.value;
         });
+
         data.totals[type] = sum;
     };
     
     var data ={
-        allItems: {
+            allItems: {
             exp:[],
             inc:[]    
         },
@@ -48,6 +62,7 @@ var KontrolorBudzeta =(function(){
     
     return {
         addItem: function(type, des,val){
+
             var newItem,ID;
             // Novi id
             if(data.allItems[type].length>0){
@@ -56,7 +71,9 @@ var KontrolorBudzeta =(function(){
             
             
             // novi objekat
-            if (type==="exp"){ newItem =  new Expense(ID,des,val);} else if (type==="inc"){
+            if (type==="exp")
+            { newItem =  new Expense(ID,des,val);} 
+            else if (type==="inc"){
                 newItem =  new Income(ID,des,val);
             }
             // dodavanje u niz
@@ -70,6 +87,7 @@ var KontrolorBudzeta =(function(){
          var ids =  data.allItems[type].map(function(current){
              return current.id;
          });
+
           var  index = ids.indexOf(id);
             if(index !== -1){
                 data.allItems[type].splice(index,1);
@@ -156,7 +174,9 @@ var KontrolorBudzeta =(function(){
              // HTML string
            if(type==="inc"){  
                element = DOMstrings.incomeContainer;
-       html =   '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>' ;  } else if(type==="exp"){
+       html =   '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>' ;  } 
+       
+       else if(type==="exp"){
            element = DOMstrings.expensesContainer;
            html =     '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
        }   
@@ -173,7 +193,7 @@ var KontrolorBudzeta =(function(){
          deleteListItem: function(selectorID){
              var el = document.getElementById(selectorID);
              el.parentNode.removeChild(el);
-             //document.getElementById(selectorID).parentNode.removeChild(document.getElementById(selectorID))
+             //document.getElementById(selectorID).parentNode.removeChild(document.getElementById(selectorID)) testing
          },
          
          
@@ -215,17 +235,22 @@ var KontrolorBudzeta =(function(){
          },
          
          formatNumber: function(num, type){
+
              // + ili minus pre broja , dve decimale i zarez u slucaju hiljada
+
              var type,sign;
              num = Math.abs(num);
              num = num.toFixed(2);
              
              var numSplit = num.split('.');
              var int = numSplit[0];
+
              if(int.length>3){
                int =  int.substr(0,int.length-3) + "," + int.substr(int.length-3,3);
              }
+
              var decimal = numSplit[1];
+
              return (type === "exp" ? sign = "-" : "+") + " " + int + "." + decimal;
              
          },
@@ -262,11 +287,7 @@ var KontrolorBudzeta =(function(){
     
      };
      
-     
-     
  })();
-
-
 
 //AplikacioniKontrolor , globalna kontrola
 var AplikacioniKontrolor= (function(KontrolorB,UIKontrol){
@@ -281,7 +302,7 @@ var AplikacioniKontrolor= (function(KontrolorB,UIKontrol){
         if(event.keyCode===13 || event.which===13){KontrDodavanja();}
     });
         
-      document.querySelector(DOM.container).addEventListener("click", ctrlDeleteItem); 
+        document.querySelector(DOM.container).addEventListener("click", ctrlDeleteItem); 
         
         document.querySelector(DOM.inputType).addEventListener("change", UIKontrolor.changedType);
         
@@ -334,10 +355,11 @@ var AplikacioniKontrolor= (function(KontrolorB,UIKontrol){
     
     var ctrlDeleteItem = function(event){
     var  itemID =  event.target.parentNode.parentNode.parentNode.parentNode.id;
+
         if(itemID){
             
             var splitID = itemID.split("-");
-          var  type = splitID[0];
+            var  type = splitID[0];
             var ID = parseInt(splitID[1]);
             
             // brisanje iz strukture
@@ -352,8 +374,9 @@ var AplikacioniKontrolor= (function(KontrolorB,UIKontrol){
     
     return {
         init: function(){
-            console.log("Aplikacija radi");
+          //  console.log("Aplikacija radi"); testing
             UIKontrolor.displayMonth();
+
             UIKontrol.displayBudget({
                 budget:0,
                 totalInc: 0,
